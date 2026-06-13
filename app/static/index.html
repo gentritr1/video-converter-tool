@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>9:16 Video Converter</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="tool-panel" aria-labelledby="title">
+        <div class="heading">
+          <p class="eyebrow">Local FFmpeg</p>
+          <h1 id="title">9:16 Video Converter</h1>
+        </div>
+
+        <form id="convertForm" class="converter">
+          <label class="drop-zone" for="fileInput">
+            <input id="fileInput" name="file" type="file" accept=".mp4,.mov,.webm,.mkv,video/mp4,video/quicktime,video/webm,video/x-matroska" required />
+            <span class="drop-title" id="fileName">Choose a video</span>
+            <span class="drop-meta">MP4, MOV, WEBM, or MKV</span>
+          </label>
+
+          <fieldset class="field-group">
+            <legend>Mode</legend>
+            <div class="segmented" role="radiogroup" aria-label="Conversion mode">
+              <label>
+                <input type="radio" name="mode" value="blur" checked />
+                <span>Blur Background</span>
+              </label>
+              <label>
+                <input type="radio" name="mode" value="crop" />
+                <span>Crop</span>
+              </label>
+              <label>
+                <input type="radio" name="mode" value="fit" />
+                <span>Fit</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field-group">
+            <legend>Quality</legend>
+            <div class="segmented compact" role="radiogroup" aria-label="Quality preset">
+              <label>
+                <input type="radio" name="quality" value="high" />
+                <span>High</span>
+              </label>
+              <label>
+                <input type="radio" name="quality" value="balanced" checked />
+                <span>Balanced</span>
+              </label>
+              <label>
+                <input type="radio" name="quality" value="small" />
+                <span>Smaller</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <button id="submitButton" class="primary-button" type="submit">Convert to 9:16</button>
+        </form>
+      </section>
+
+      <aside class="status-panel" aria-live="polite">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="preview-lines">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-box">
+          <div class="status-row">
+            <span id="statusLabel">Idle</span>
+            <span id="progressText">0%</span>
+          </div>
+          <div class="progress-track" aria-hidden="true">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+          <p id="message" class="message">Ready for a local MP4 conversion.</p>
+          <a id="downloadLink" class="download-link" href="#" hidden>Download MP4</a>
+        </div>
+      </aside>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
