@@ -2,6 +2,19 @@
 
 This roadmap keeps the tool local-first, free, and FFmpeg-driven. The target user is a creator or small team that has horizontal or full-screen video and wants clean vertical exports for TikTok, Instagram Reels, YouTube Shorts, and similar feeds without uploading raw footage to a paid service.
 
+## Local-First Constraints
+
+This is not intended to be a deployed cloud service. The default product shape is a local app that runs on the user's own machine.
+
+- Bind to `127.0.0.1` by default.
+- Keep uploads, temporary files, previews, and outputs on local disk.
+- Use local FFmpeg/ffprobe for all processing.
+- Avoid paid APIs and remote video processing.
+- Prefer local dependencies and optional local models for advanced features.
+- Treat deployment support as out of scope unless explicitly requested later.
+
+Efficiency work should assume local CPU, disk, memory, and battery constraints. The app should avoid launching too many FFmpeg jobs at once, avoid full encodes when a preview will answer the user's question, and make heavyweight features opt-in.
+
 ## Current Baseline
 
 The app already has the core conversion loop:
@@ -41,6 +54,28 @@ The strongest product position is not "another converter." It should become a lo
 - Batch process many clips with consistent settings.
 - Add optional creator polish such as safe zones, captions, thumbnails, and audio normalization.
 - Keep advanced AI features local and optional.
+
+## Local Efficiency Plan
+
+The goal is not maximum server throughput. The goal is fast, predictable local use on a creator's machine.
+
+1. **Bounded conversion queue**
+   Run one FFmpeg job by default, with a configurable concurrency limit for powerful machines.
+
+2. **Preview before encode**
+   Generate lightweight preview frames before full conversion so the user does not waste time on the wrong mode.
+
+3. **Avoid unnecessary work**
+   Reuse probed metadata, cache previews during a session, and clean up expired files.
+
+4. **Use sane defaults**
+   Keep `libx264`, CRF-based encoding, AAC audio, `yuv420p`, and `+faststart` as the compatibility baseline.
+
+5. **Optional hardware acceleration later**
+   Explore platform-specific encoders such as VideoToolbox on macOS only as optional presets. Keep software H.264 as the quality/compatibility default because hardware encoders can be faster but less consistent at the same apparent bitrate.
+
+6. **Clear diagnostics**
+   Show FFmpeg/ffprobe versions, active queue state, and per-job errors locally so users can fix setup issues without logs from a remote service.
 
 ## Priority Matrix
 
@@ -250,6 +285,14 @@ Why it matters: creators often need a cover frame for posting workflows.
 - Evaluate Tauri, Electron, and PyInstaller. The best choice depends on whether we want a real browser UI shell or a simpler local executable.
 
 Why it matters: many users will not want to run terminal commands.
+
+**Local launch mode**
+
+- Provide a command or package entry point that starts the server on `127.0.0.1`.
+- Optionally open the browser automatically after startup.
+- Keep network exposure opt-in and documented.
+
+Why it matters: local-only behavior should be the default even after packaging.
 
 **FFmpeg discovery**
 
@@ -530,6 +573,7 @@ Make the tool usable without terminal knowledge.
 ## Not Recommended Yet
 
 - Cloud upload or paid APIs. It would weaken the privacy/local-first value.
+- Deploying this as a public hosted converter. The current product strategy is local processing, not server-side processing of user videos.
 - Full timeline editing. That turns the app into a video editor and dilutes the focused converter workflow.
 - AI auto-reframe before manual focal point and previews. Manual controls solve many cases with less complexity.
 - Bundling FFmpeg before licensing and platform packaging are decided.

@@ -2,6 +2,19 @@
 
 A free local web app that uses FFmpeg to convert one uploaded video into a 1080x1920 MP4 for TikTok, Reels, and Shorts.
 
+## Local-Only Approach
+
+This project is designed to run on your own machine, not as a hosted SaaS app.
+
+- The app binds to `127.0.0.1` in the documented run command, so it is only reachable from the local computer by default.
+- Uploaded videos and converted outputs stay in the local `storage/` folder.
+- FFmpeg and ffprobe run locally and do the actual media processing.
+- No video is uploaded to cloud services by the app.
+- No paid APIs are required.
+- Temporary job files are cleaned up after the configured TTL.
+
+The public GitHub repository is for source code distribution only. It is not a deployment target for processing videos.
+
 ## Features
 
 - Accepts `.mp4`, `.mov`, `.webm`, and `.mkv` uploads
@@ -38,6 +51,8 @@ uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+Do not run this with `--host 0.0.0.0` unless you intentionally want other devices on your network to reach the app.
 
 ## Configuration
 
