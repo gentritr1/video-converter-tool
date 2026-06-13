@@ -55,3 +55,7 @@ Environment variables:
 - **Fit**: keeps the whole video visible and adds black padding.
 
 The FFmpeg wrapper uses argument lists with `shell=False`; raw user input is never concatenated into a shell command.
+
+## Roadmap
+
+See [docs/ROADMAP.md](docs/ROADMAP.md) for researched feature ideas and implementation plans for the next development phases.
